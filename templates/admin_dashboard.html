@@ -1,0 +1,386 @@
+{% extends "base.html" %}
+
+{% block title %}Municipal Admin Central - EcoClean{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Top Admin Welcome Card -->
+    <div class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-lg mb-8 relative overflow-hidden">
+        <div class="absolute -right-8 -bottom-8 w-56 h-56 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div class="flex items-center space-x-4">
+                <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-3xl border border-white/20 shadow-inner">
+                    <span>🛡️</span>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h1 class="text-2xl sm:text-3xl font-bold font-heading" id="adminNameHeader">Municipal Admin</h1>
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/30 border border-indigo-400/40 text-indigo-200">
+                            Single User System
+                        </span>
+                    </div>
+                    <p class="text-sm text-indigo-200/90 mt-1 flex flex-wrap items-center gap-3">
+                        <span><i class="fa-solid fa-server mr-1"></i> Central Management Console</span>
+                        <span>•</span>
+                        <span><i class="fa-solid fa-clock mr-1"></i> 24/7 SLA Monitoring</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Quick Status Pill -->
+            <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-right">
+                <span class="text-xs text-indigo-200 block font-medium">System Health</span>
+                <span class="text-lg font-bold text-emerald-400 flex items-center space-x-1.5 justify-end mt-0.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>100% Operational</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs for the 4 Options -->
+    <div class="bg-white rounded-2xl p-2 shadow-sm border border-slate-200 mb-8 overflow-x-auto flex space-x-2">
+        <button onclick="switchAdminTab('dashboard')" id="tabBtnAdminDashboard" class="admin-tab-btn flex-1 min-w-[150px] py-3 px-4 rounded-xl text-sm font-semibold flex items-center justify-center space-x-2 bg-indigo-600 text-white shadow-sm transition">
+            <i class="fa-solid fa-chart-column"></i>
+            <span>Dashboard</span>
+        </button>
+        <button onclick="switchAdminTab('alerts')" id="tabBtnAdminAlerts" class="admin-tab-btn flex-1 min-w-[170px] py-3 px-4 rounded-xl text-sm font-semibold flex items-center justify-center space-x-2 text-slate-600 hover:text-indigo-700 hover:bg-slate-50 transition">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Waste Area Alert</span>
+        </button>
+        <button onclick="switchAdminTab('loggers')" id="tabBtnAdminLoggers" class="admin-tab-btn flex-1 min-w-[150px] py-3 px-4 rounded-xl text-sm font-semibold flex items-center justify-center space-x-2 text-slate-600 hover:text-indigo-700 hover:bg-slate-50 transition">
+            <i class="fa-solid fa-table-list"></i>
+            <span>Loggers</span>
+        </button>
+        <button onclick="switchAdminTab('employees')" id="tabBtnAdminEmployees" class="admin-tab-btn flex-1 min-w-[150px] py-3 px-4 rounded-xl text-sm font-semibold flex items-center justify-center space-x-2 text-slate-600 hover:text-indigo-700 hover:bg-slate-50 transition">
+            <i class="fa-solid fa-id-card-clip"></i>
+            <span>Employees</span>
+        </button>
+    </div>
+
+    <!-- ================= TAB 1: DASHBOARD ================= -->
+    <div id="tabContentAdminDashboard" class="admin-tab-content">
+        <!-- Dashboard Requirement: shows total numbers of = Users, Complains, Collector, Resolve complains -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- 1. Total Users -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Users</span>
+                    <h3 id="statTotalUsers" class="text-3xl font-black text-slate-800 mt-1">0</h3>
+                    <p class="text-xs text-slate-500 mt-1">Registered Citizens</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+            </div>
+
+            <!-- 2. Total Complains -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Complains</span>
+                    <h3 id="statTotalComplaints" class="text-3xl font-black text-slate-800 mt-1">0</h3>
+                    <p class="text-xs text-slate-500 mt-1">Reported Across City</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-file-circle-exclamation"></i>
+                </div>
+            </div>
+
+            <!-- 3. Total Collectors -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Collectors</span>
+                    <h3 id="statTotalCollectors" class="text-3xl font-black text-slate-800 mt-1">0</h3>
+                    <p class="text-xs text-slate-500 mt-1">Assigned Field Staff</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-truck-pickup"></i>
+                </div>
+            </div>
+
+            <!-- 4. Total Resolved Complains -->
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Resolved Complains</span>
+                    <h3 id="statTotalResolved" class="text-3xl font-black text-emerald-600 mt-1">0</h3>
+                    <p class="text-xs text-slate-500 mt-1">Verified with Photos</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity & Resolution Performance -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                <h3 class="text-lg font-bold font-heading text-slate-900 mb-4 flex items-center space-x-2">
+                    <i class="fa-solid fa-clock-rotate-left text-indigo-600"></i>
+                    <span>Recent Complaints Feed</span>
+                </h3>
+                <div id="adminRecentComplaintsList" class="space-y-3">
+                    <p class="text-xs text-slate-400 py-6 text-center">Loading recent activity...</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                <h3 class="text-lg font-bold font-heading text-slate-900 mb-4 flex items-center space-x-2">
+                    <i class="fa-solid fa-gauge-high text-indigo-600"></i>
+                    <span>Quick Admin Actions</span>
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="switchAdminTab('alerts')" class="w-full py-3 px-4 rounded-xl bg-slate-50 hover:bg-red-50 hover:text-red-700 text-slate-700 text-xs font-semibold border border-slate-200 transition flex items-center justify-between">
+                        <span class="flex items-center space-x-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                            <span>Review High Alert Waste Areas</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
+                    </button>
+                    <button onclick="switchAdminTab('loggers')" class="w-full py-3 px-4 rounded-xl bg-slate-50 hover:bg-blue-50 hover:text-blue-700 text-slate-700 text-xs font-semibold border border-slate-200 transition flex items-center justify-between">
+                        <span class="flex items-center space-x-2">
+                            <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                            <span>View All Citizen Loggers</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
+                    </button>
+                    <button onclick="openAddCollectorModal()" class="w-full py-3 px-4 rounded-xl bg-slate-50 hover:bg-teal-50 hover:text-teal-700 text-slate-700 text-xs font-semibold border border-slate-200 transition flex items-center justify-between">
+                        <span class="flex items-center space-x-2">
+                            <span class="w-3 h-3 rounded-full bg-teal-500"></span>
+                            <span>Register New Waste Collector</span>
+                        </span>
+                        <i class="fa-solid fa-plus text-slate-400 text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TAB 2: WASTE AREA ALERT ================= -->
+    <div id="tabContentAdminAlerts" class="admin-tab-content hidden">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm mb-8">
+            <div class="pb-6 border-b border-slate-100">
+                <h2 class="text-xl font-bold font-heading text-slate-900 flex items-center space-x-2">
+                    <span class="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </span>
+                    <span>Waste Area Alert System</span>
+                </h2>
+                <p class="text-xs text-slate-500 mt-1">
+                    Areas dynamically categorized into 4 alert tiers based on pending user complaints. 
+                    <strong>Click any interactable color button below</strong> to filter and inspect areas.
+                </p>
+            </div>
+
+            <!-- 4 INTERACTABLE COLOR BUTTONS -->
+            <!-- High: Red, Medium: Orange, Low: Yellow, Clear: Green -->
+            <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <!-- Red: High Alert -->
+                <button onclick="filterAreaAlerts('High')" id="btnAlertHigh" class="alert-btn active-high py-4 px-4 rounded-2xl border text-center transition flex flex-col items-center justify-center space-y-1">
+                    <span class="text-xs font-bold uppercase tracking-wider">🔴 High Alert</span>
+                    <span id="badgeCountHigh" class="text-2xl font-black">0</span>
+                    <span class="text-[11px] opacity-90">&gt; 5 Active Complaints</span>
+                </button>
+
+                <!-- Orange: Medium Alert -->
+                <button onclick="filterAreaAlerts('Medium')" id="btnAlertMedium" class="alert-btn bg-slate-50 text-slate-700 hover:bg-orange-50 hover:text-orange-700 border border-slate-200 py-4 px-4 rounded-2xl text-center transition flex flex-col items-center justify-center space-y-1">
+                    <span class="text-xs font-bold uppercase tracking-wider">🟠 Medium Alert</span>
+                    <span id="badgeCountMedium" class="text-2xl font-black">0</span>
+                    <span class="text-[11px] opacity-80">3 - 5 Active Complaints</span>
+                </button>
+
+                <!-- Yellow: Low Alert -->
+                <button onclick="filterAreaAlerts('Low')" id="btnAlertLow" class="alert-btn bg-slate-50 text-slate-700 hover:bg-yellow-50 hover:text-yellow-700 border border-slate-200 py-4 px-4 rounded-2xl text-center transition flex flex-col items-center justify-center space-y-1">
+                    <span class="text-xs font-bold uppercase tracking-wider">🟡 Low Alert</span>
+                    <span id="badgeCountLow" class="text-2xl font-black">0</span>
+                    <span class="text-[11px] opacity-80">1 - 2 Active Complaints</span>
+                </button>
+
+                <!-- Green: Clear -->
+                <button onclick="filterAreaAlerts('Clear')" id="btnAlertClear" class="alert-btn bg-slate-50 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 border border-slate-200 py-4 px-4 rounded-2xl text-center transition flex flex-col items-center justify-center space-y-1">
+                    <span class="text-xs font-bold uppercase tracking-wider">🟢 Clear Area</span>
+                    <span id="badgeCountClear" class="text-2xl font-black">0</span>
+                    <span class="text-[11px] opacity-80">0 Active Complaints (Clean)</span>
+                </button>
+            </div>
+
+            <!-- "Show All" toggle option -->
+            <div class="mt-4 flex justify-end">
+                <button onclick="filterAreaAlerts('ALL')" id="btnAlertAll" class="text-xs font-semibold text-slate-500 hover:text-indigo-600 underline">
+                    Show All Areas Combined
+                </button>
+            </div>
+        </div>
+
+        <!-- Rendered Area Cards for Selected Color Filter -->
+        <div class="mb-4 flex items-center justify-between">
+            <h3 class="text-base font-bold text-slate-800 font-heading" id="currentAlertCategoryTitle">
+                Showing: High Alert Areas (Red)
+            </h3>
+            <span class="text-xs font-semibold px-3 py-1 bg-slate-100 rounded-full text-slate-600" id="currentAlertCategoryCount">
+                0 Areas
+            </span>
+        </div>
+
+        <div id="areaAlertsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Populated via admin.js -->
+        </div>
+    </div>
+
+    <!-- ================= TAB 3: LOGGERS (Users Table) ================= -->
+    <div id="tabContentAdminLoggers" class="admin-tab-content hidden">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 mb-6 border-b border-slate-100 gap-4">
+                <div>
+                    <h2 class="text-xl font-bold font-heading text-slate-900 flex items-center space-x-2">
+                        <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-table-list"></i>
+                        </span>
+                        <span>Citizen User Loggers</span>
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Directory of citizen user IDs and profiles in tabular format.</p>
+                </div>
+                <!-- Search filter -->
+                <div class="w-full sm:w-72">
+                    <input type="text" id="loggerSearchInput" oninput="searchLoggersTable()" placeholder="Search by name, ID, area, email..." class="w-full px-4 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500">
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider border-b border-slate-200">
+                            <th class="p-3">User ID</th>
+                            <th class="p-3">Name</th>
+                            <th class="p-3">Age</th>
+                            <th class="p-3">Gender</th>
+                            <th class="p-3">Area</th>
+                            <th class="p-3">Email ID</th>
+                            <th class="p-3">Phone</th>
+                            <th class="p-3 text-center">Reports Filed</th>
+                            <th class="p-3">Joined Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="loggersTableBody" class="divide-y divide-slate-100">
+                        <tr>
+                            <td colspan="9" class="p-6 text-center text-slate-400">Loading user loggers...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TAB 4: EMPLOYEES (Collectors Table) ================= -->
+    <div id="tabContentAdminEmployees" class="admin-tab-content hidden">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 mb-6 border-b border-slate-100 gap-4">
+                <div>
+                    <h2 class="text-xl font-bold font-heading text-slate-900 flex items-center space-x-2">
+                        <span class="w-8 h-8 rounded-lg bg-teal-100 text-teal-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-id-card-clip"></i>
+                        </span>
+                        <span>Municipal Collector Employees</span>
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Waste collector employees directory and area assignment registry in tabular format.</p>
+                </div>
+                <div class="flex items-center space-x-3 w-full sm:w-auto">
+                    <input type="text" id="employeeSearchInput" oninput="searchEmployeesTable()" placeholder="Search collector, area..." class="px-4 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500">
+                    <button onclick="openAddCollectorModal()" class="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold flex items-center space-x-1.5 shadow-sm transition whitespace-nowrap">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Add Collector</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider border-b border-slate-200">
+                            <th class="p-3">Collector ID</th>
+                            <th class="p-3">Name</th>
+                            <th class="p-3">Gender</th>
+                            <th class="p-3">Phone Number</th>
+                            <th class="p-3">Email ID</th>
+                            <th class="p-3">Assigned Area</th>
+                            <th class="p-3 text-center">Tasks Assigned</th>
+                            <th class="p-3 text-center">Resolved Tasks</th>
+                            <th class="p-3 text-center">Digital Coins 🪙</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeesTableBody" class="divide-y divide-slate-100">
+                        <tr>
+                            <td colspan="9" class="p-6 text-center text-slate-400">Loading collector employees...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal: Add New Collector -->
+<div id="addCollectorModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-md p-6 modal-fade-in">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+            <h3 class="text-lg font-bold text-slate-900 font-heading">Register Waste Collector Employee</h3>
+            <button onclick="closeAddCollectorModal()" class="text-slate-400 hover:text-slate-600 text-lg">✕</button>
+        </div>
+        <form onsubmit="submitAddCollector(event)" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Collector Full Name *</label>
+                <input type="text" id="newColName" required placeholder="e.g. Ramesh Kumar" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs">
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Gender</label>
+                    <select id="newColGender" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Initial Password</label>
+                    <input type="text" id="newColPass" value="col123" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Assigned Area *</label>
+                <select id="newColArea" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs">
+                    <option value="Downtown Sector 1">Downtown Sector 1</option>
+                    <option value="Greenwood Park">Greenwood Park</option>
+                    <option value="Riverside Colony">Riverside Colony</option>
+                    <option value="Metro Central">Metro Central</option>
+                    <option value="Sunnyvale West">Sunnyvale West</option>
+                    <option value="Industrial Zone B">Industrial Zone B</option>
+                    <option value="Old Town Square">Old Town Square</option>
+                    <option value="Highland Heights">Highland Heights</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Phone Number *</label>
+                <input type="tel" id="newColPhone" required placeholder="9811223344" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Email ID *</label>
+                <input type="email" id="newColEmail" required placeholder="ramesh.col@ecoclean.org" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs">
+            </div>
+            <div class="p-3 bg-teal-50 rounded-xl text-[11px] text-teal-800">
+                <i class="fa-solid fa-fingerprint mr-1"></i> A <strong>Unique ID number (e.g. COL-XXXX)</strong> will automatically be assigned.
+            </div>
+            <div class="flex justify-end space-x-3 pt-3">
+                <button type="button" onclick="closeAddCollectorModal()" class="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 text-xs font-semibold">Cancel</button>
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold shadow-sm">Register Collector</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

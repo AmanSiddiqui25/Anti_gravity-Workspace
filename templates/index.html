@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}EcoClean - Smart Municipal Waste Tracking & Resolution{% endblock %}
+
+{% block content %}
+<div class="relative overflow-hidden bg-gradient-to-b from-emerald-50/60 via-slate-50 to-white pt-10 pb-20">
+    <!-- Decorative background blobs -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 pointer-events-none overflow-hidden opacity-30">
+        <div class="absolute -top-10 left-10 w-72 h-72 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl"></div>
+        <div class="absolute top-20 right-10 w-80 h-80 bg-teal-300 rounded-full mix-blend-multiply filter blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <!-- Hero Section -->
+        <div class="text-center max-w-3xl mx-auto pt-6 pb-12">
+            <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold mb-6 border border-emerald-200">
+                <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                <span>Active 48-Hour Municipal Cleanliness SLA</span>
+            </div>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
+                Cleaner Neighborhoods, <br/>
+                <span class="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">Smarter Municipal Action.</span>
+            </h1>
+            <p class="mt-5 text-lg text-slate-600 leading-relaxed">
+                Report street garbage in seconds, track resolutions in real-time within 48 hours, unlock citizen honor badges, and empower waste collectors with verified photo workflows and digital rewards.
+            </p>
+            <div class="mt-8 flex flex-wrap justify-center gap-4">
+                <a href="/login?role=user" class="px-6 py-3.5 rounded-xl bg-emerald-600 text-white font-semibold shadow-lg shadow-emerald-600/25 hover:bg-emerald-700 transition flex items-center space-x-2">
+                    <i class="fa-solid fa-camera"></i>
+                    <span>Report Waste Now</span>
+                </a>
+                <a href="/login" class="px-6 py-3.5 rounded-xl bg-white border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50 transition shadow-sm flex items-center space-x-2">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Access Portal</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- 3 Key Components Cards -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- 1. Citizens / Users -->
+            <div class="glass-card rounded-3xl p-8 border border-slate-200 shadow-sm relative group hover:border-emerald-500/50">
+                <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 mb-3">
+                    Component 1
+                </div>
+                <h3 class="text-2xl font-bold font-heading text-slate-900 mb-2">Citizen Users</h3>
+                <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                    Report local waste with instant photo upload, monitor 48h resolution SLA countdowns, earn Bronze, Silver, &amp; Gold badges, and explore area dumping spots.
+                </p>
+                <div class="space-y-2.5 text-xs text-slate-700 border-t border-slate-100 pt-5 mb-6">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check-circle text-emerald-600"></i>
+                        <span>Unique Citizen ID (e.g. USR-1001)</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check-circle text-emerald-600"></i>
+                        <span>Badge Rewards (25=Bronze, 50=Silver, 100=Gold)</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check-circle text-emerald-600"></i>
+                        <span>48-Hour Live Tracking &amp; Task Complete Alert</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check-circle text-emerald-600"></i>
+                        <span>Area Dumping Spots &amp; Assigned Collectors</span>
+                    </div>
+                </div>
+                <a href="/login?role=user" class="w-full py-2.5 px-4 rounded-xl bg-slate-900 text-white font-medium text-sm flex items-center justify-center space-x-2 hover:bg-emerald-700 transition">
+                    <span>Citizen Portal Login</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+
+            <!-- 2. Waste Collectors -->
+            <div class="glass-card rounded-3xl p-8 border border-slate-200 shadow-sm relative group hover:border-teal-500/50">
+                <div class="w-14 h-14 rounded-2xl bg-teal-100 text-teal-600 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-truck-pickup"></i>
+                </div>
+                <div class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-200 mb-3">
+                    Component 2
+                </div>
+                <h3 class="text-2xl font-bold font-heading text-slate-900 mb-2">Waste Collectors</h3>
+                <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                    Assigned area task management, photo verification proof submission upon cleanup, dynamic daily progress bar, and monthly cash-convertible digital coins.
+                </p>
+                <div class="space-y-2.5 text-xs text-slate-700 border-t border-slate-100 pt-5 mb-6">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check-circle text-teal-600"></i>
+                        <span>Unique Collector ID (e.g. COL-2001)</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check-circle text-teal-600"></i>
+                        <span>Before &amp; After Photo Verification</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check-circle text-teal-600"></i>
+                        <span>Daily 70%+ Progress Bar Milestone</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check-circle text-teal-600"></i>
+                        <span>Digital Coin Wallet &amp; Month-End Cash Payout</span>
+                    </div>
+                </div>
+                <a href="/login?role=collector" class="w-full py-2.5 px-4 rounded-xl bg-teal-600 text-white font-medium text-sm flex items-center justify-center space-x-2 hover:bg-teal-700 transition">
+                    <span>Collector Portal Login</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+
+            <!-- 3. Admin (Single User) -->
+            <div class="glass-card rounded-3xl p-8 border border-slate-200 shadow-sm relative group hover:border-indigo-500/50">
+                <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 mb-3">
+                    Component 3
+                </div>
+                <h3 class="text-2xl font-bold font-heading text-slate-900 mb-2">Municipal Admin</h3>
+                <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                    Single-user central command. Real-time statistics, 4-tier interactive Waste Area Alert (High: Red, Medium: Orange, Low: Yellow, Clear: Green), User Loggers, and Collector Directory.
+                </p>
+                <div class="space-y-2.5 text-xs text-slate-700 border-t border-slate-100 pt-5 mb-6">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check-circle text-indigo-600"></i>
+                        <span>Single User Login Authentication</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check-circle text-indigo-600"></i>
+                        <span>4-Color Interactive Waste Alert System</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check-circle text-indigo-600"></i>
+                        <span>Citizen User Loggers Directory Table</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-check-circle text-indigo-600"></i>
+                        <span>Collector Employees &amp; Assignment Table</span>
+                    </div>
+                </div>
+                <a href="/login?role=admin" class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 text-white font-medium text-sm flex items-center justify-center space-x-2 hover:bg-indigo-700 transition">
+                    <span>Admin Central Login</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Demo Credentials Banner for Testing -->
+        <div class="mt-16 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <h4 class="text-lg font-bold font-heading text-slate-800 flex items-center space-x-2">
+                        <i class="fa-solid fa-key text-emerald-600"></i>
+                        <span>Quick Access Demo Accounts</span>
+                    </h4>
+                    <p class="text-sm text-slate-500 mt-1">Pre-configured accounts with live complaints, badges, and assigned areas ready for testing.</p>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="quickLogin('user', 'aarav@gmail.com', 'user123')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 text-xs font-semibold border border-slate-200 transition">
+                        👤 Demo Citizen (Aarav Patel)
+                    </button>
+                    <button onclick="quickLogin('collector', 'rajesh.col@ecoclean.org', 'col123')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-slate-700 text-xs font-semibold border border-slate-200 transition">
+                        🚛 Demo Collector (Rajesh Kumar)
+                    </button>
+                    <button onclick="quickLogin('admin', 'admin@ecoclean.org', 'admin123')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 text-xs font-semibold border border-slate-200 transition">
+                        🛡️ Demo Admin (admin@ecoclean.org)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

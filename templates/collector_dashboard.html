@@ -1,0 +1,366 @@
+{% extends "base.html" %}
+
+{% block title %}Collector Portal - EcoClean{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Top Collector Welcome Card & Assigned Area Banner -->
+    <div class="bg-gradient-to-r from-teal-800 via-teal-700 to-emerald-700 rounded-3xl p-6 sm:p-8 text-white shadow-lg mb-8 relative overflow-hidden">
+        <div class="absolute -right-8 -bottom-8 w-56 h-56 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div class="flex items-center space-x-4">
+                <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl border border-white/30 shadow-inner">
+                    <span>🚛</span>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h1 class="text-2xl sm:text-3xl font-bold font-heading" id="colNameHeader">Collector</h1>
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-400/30 border border-teal-300/40 text-teal-100">
+                            Municipal Sanitation Specialist
+                        </span>
+                    </div>
+                    <p class="text-sm text-teal-100/90 mt-1 flex flex-wrap items-center gap-3">
+                        <span><i class="fa-solid fa-fingerprint mr-1"></i> ID: <strong id="colUniqueIdHeader" class="text-white tracking-wider">COL-XXXX</strong></span>
+                        <span>•</span>
+                        <span><i class="fa-solid fa-map-pin mr-1"></i> Assigned Area: <strong id="colAreaHeader" class="text-white">Downtown Sector 1</strong></span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Digital Coins & Daily Milestone Pill -->
+            <div class="flex items-center space-x-4 bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20">
+                <div class="text-center px-2">
+                    <span id="colCoinsHeader" class="block text-2xl font-black text-amber-300">0</span>
+                    <span class="text-[11px] text-teal-100 uppercase tracking-wider font-medium">Digital Coins 🪙</span>
+                </div>
+                <div class="h-8 w-px bg-white/20"></div>
+                <div class="text-center px-2">
+                    <span id="colProgressPctHeader" class="block text-2xl font-black text-white">0%</span>
+                    <span class="text-[11px] text-teal-100 uppercase tracking-wider font-medium">Area Progress</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs for the 3 Collector Options -->
+    <div class="bg-white rounded-2xl p-2 shadow-sm border border-slate-200 mb-8 overflow-x-auto flex space-x-2">
+        <button onclick="switchColTab('dashboard')" id="tabBtnColDashboard" class="col-tab-btn flex-1 min-w-[150px] py-3 px-4 rounded-xl text-sm font-semibold flex items-center justify-center space-x-2 bg-teal-600 text-white shadow-sm transition">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Dashboard</span>
+        </button>
+        <button onclick="switchColTab('progress')" id="tabBtnColProgress" class="col-tab-btn flex-1 min-w-[170px] py-3 px-4 rounded-xl text-sm font-semibold flex items-center justify-center space-x-2 text-slate-600 hover:text-teal-700 hover:bg-slate-50 transition">
+            <i class="fa-solid fa-bars-progress"></i>
+            <span>Personal Progress</span>
+        </button>
+        <button onclick="switchColTab('profile')" id="tabBtnColProfile" class="col-tab-btn flex-1 min-w-[160px] py-3 px-4 rounded-xl text-sm font-semibold flex items-center justify-center space-x-2 text-slate-600 hover:text-teal-700 hover:bg-slate-50 transition">
+            <i class="fa-solid fa-coins"></i>
+            <span>Profile &amp; Rewards</span>
+        </button>
+    </div>
+
+    <!-- ================= TAB 1: DASHBOARD ================= -->
+    <div id="tabContentColDashboard" class="col-tab-content">
+        <!-- 3 Stats Cards: Pending, Resolved, Total Assigned -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Pending Complaints</span>
+                    <h3 id="statPendingCount" class="text-3xl font-extrabold text-amber-600 mt-1">0</h3>
+                    <p class="text-xs text-slate-500 mt-1">Awaiting cleanup &amp; verification</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Completed / Resolved</span>
+                    <h3 id="statResolvedCount" class="text-3xl font-extrabold text-emerald-600 mt-1">0</h3>
+                    <p class="text-xs text-slate-500 mt-1">Verified with photo upload</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Area Tasks</span>
+                    <h3 id="statTotalCount" class="text-3xl font-extrabold text-slate-800 mt-1">0</h3>
+                    <p class="text-xs text-slate-500 mt-1" id="statAreaNameLabel">Downtown Sector 1</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-list-ol"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2 Columns: Pending Queue & Resolved History Preview -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Pending Complaints Box -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+                    <h3 class="text-lg font-bold font-heading text-slate-900 flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-amber-500 animate-pulse"></span>
+                        <span>Pending Action Queue</span>
+                    </h3>
+                    <button onclick="switchColTab('progress')" class="text-xs font-semibold text-teal-600 hover:underline">
+                        Take Action in Progress Tab →
+                    </button>
+                </div>
+                <div id="dashboardPendingList" class="space-y-4 max-h-96 overflow-y-auto pr-1">
+                    <p class="text-center text-slate-400 py-8 text-xs">No pending complaints in your area!</p>
+                </div>
+            </div>
+
+            <!-- Completed / Resolved Box -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+                    <h3 class="text-lg font-bold font-heading text-slate-900 flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                        <span>Recently Resolved by You</span>
+                    </h3>
+                    <span class="text-xs font-semibold text-slate-400">Photo Proof Verified</span>
+                </div>
+                <div id="dashboardResolvedList" class="space-y-4 max-h-96 overflow-y-auto pr-1">
+                    <p class="text-center text-slate-400 py-8 text-xs">No resolved complaints yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TAB 2: PERSONAL PROGRESS ================= -->
+    <div id="tabContentColProgress" class="col-tab-content hidden">
+        <!-- Interactive Progress Bar Card -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm mb-8">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 mb-6 border-b border-slate-100 gap-4">
+                <div>
+                    <h2 class="text-xl font-bold font-heading text-slate-900 flex items-center space-x-2">
+                        <span class="w-8 h-8 rounded-lg bg-teal-100 text-teal-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-bars-progress"></i>
+                        </span>
+                        <span>Personal Progress &amp; Resolution Bar</span>
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">
+                        Clear complaints by uploading photo proof of the cleaned place. 
+                        <strong>Achieve &ge; 70% daily progress to earn 1 Digital Coin 🪙!</strong>
+                    </p>
+                </div>
+                <div class="bg-teal-50 px-4 py-2 rounded-2xl border border-teal-200 text-right">
+                    <span class="text-xs text-teal-600 font-medium block">Resolution Rate</span>
+                    <span id="colProgressBigPct" class="text-3xl font-black text-teal-800">0%</span>
+                </div>
+            </div>
+
+            <!-- Animated Progress Bar -->
+            <div class="relative pt-2">
+                <!-- 70% Marker Line -->
+                <div class="absolute top-0 left-[70%] -translate-x-1/2 flex flex-col items-center pointer-events-none z-10">
+                    <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-300 shadow-xs mb-1">
+                        ⭐ 70% Coin Target
+                    </span>
+                    <div class="w-0.5 h-6 bg-amber-500"></div>
+                </div>
+
+                <div class="w-full bg-slate-100 h-6 rounded-full overflow-hidden shadow-inner p-1 border border-slate-200">
+                    <div id="colProgressBarFill" class="h-full bg-gradient-to-r from-teal-500 to-emerald-500 rounded-full transition-all duration-700 flex items-center justify-end pr-2 text-white font-bold text-[11px]" style="width: 0%">
+                        <span id="colProgressBarLabel">0%</span>
+                    </div>
+                </div>
+                <div class="flex justify-between text-xs text-slate-400 mt-3 font-semibold">
+                    <span>0% (Day Start)</span>
+                    <span class="text-amber-600 font-bold">70% (Daily Reward Threshold)</span>
+                    <span>100% (All Cleared)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complaints List with Action to Resolve -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-100">
+                <h3 class="text-lg font-bold font-heading text-slate-900 flex items-center space-x-2">
+                    <i class="fa-solid fa-list-check text-teal-600"></i>
+                    <span>Area Complaints &amp; Verification Action</span>
+                </h3>
+                <span class="text-xs font-semibold px-3 py-1 bg-slate-100 rounded-full text-slate-600" id="progressTasksBadge">0 Active Tasks</span>
+            </div>
+
+            <div id="colActionComplaintsList" class="space-y-6">
+                <!-- Rendered dynamically by collector.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TAB 3: PROFILE & REWARDS ================= -->
+    <div id="tabContentColProfile" class="col-tab-content hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Collector Details Card -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-100">
+                    <h3 class="text-lg font-bold font-heading text-slate-900 flex items-center space-x-2">
+                        <i class="fa-solid fa-id-badge text-teal-600"></i>
+                        <span>Collector Details</span>
+                    </h3>
+                    <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-lg border border-emerald-200">
+                        Active Staff
+                    </span>
+                </div>
+
+                <div class="space-y-4 text-sm" id="colDetailsList">
+                    <div>
+                        <span class="text-xs text-slate-400 font-medium block">Unique Collector ID</span>
+                        <span id="colProfUniqueId" class="font-bold text-slate-800 tracking-wider">COL-XXXX</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400 font-medium block">Full Name</span>
+                        <span id="colProfName" class="font-semibold text-slate-800">-</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-xs text-slate-400 font-medium block">Gender</span>
+                            <span id="colProfGender" class="font-semibold text-slate-800">-</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 font-medium block">Assigned Area</span>
+                            <span id="colProfArea" class="font-semibold text-teal-700">-</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400 font-medium block">Phone Number</span>
+                        <span id="colProfPhone" class="font-semibold text-slate-800">-</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400 font-medium block">Email ID</span>
+                        <span id="colProfEmail" class="font-semibold text-slate-800">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reward Section & End-of-Month Cash Conversion -->
+            <div class="lg:col-span-2 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-100">
+                    <div>
+                        <h3 class="text-lg font-bold font-heading text-slate-900 flex items-center space-x-2">
+                            <span class="text-2xl">🪙</span>
+                            <span>Collector Reward &amp; Digital Coins Section</span>
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-1">
+                            Increments by 1 Digital Coin daily upon reaching &ge; 70% progress bar. Redeemable for cash at end of month!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Digital Coins Wallet Card -->
+                <div class="bg-gradient-to-br from-amber-500 via-amber-600 to-orange-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden mb-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider font-bold text-amber-200">Accumulated Digital Balance</span>
+                            <div class="flex items-baseline space-x-2 mt-1">
+                                <span id="rewardWalletCoins" class="text-5xl font-black font-heading">0</span>
+                                <span class="text-xl font-bold text-amber-100">Digital Coins</span>
+                            </div>
+                            <p class="text-xs text-amber-100 mt-2 flex items-center space-x-1.5" id="dailyCoinStatusText">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Complete 70% of today's tasks to earn +1 coin today!</span>
+                            </p>
+                        </div>
+
+                        <!-- Cash Conversion Summary Box -->
+                        <div class="bg-white/20 backdrop-blur-md p-4 rounded-2xl border border-white/30 text-right min-w-[200px]">
+                            <span class="text-xs text-amber-100 block font-medium">Estimated End-of-Month Cash</span>
+                            <span id="rewardCashINR" class="text-3xl font-extrabold text-white block mt-0.5">₹0</span>
+                            <span id="rewardCashUSD" class="text-xs text-amber-200 block">≈ $0 USD</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversion Calculator & Policy -->
+                <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                    <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-hand-holding-dollar text-emerald-600"></i>
+                        <span>Month-End Cash Conversion Policy</span>
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-600 mb-4">
+                        <div class="p-3 bg-white rounded-xl border border-slate-200">
+                            <span class="font-bold text-slate-800 block mb-0.5">Daily Qualification Rule</span>
+                            Achieve 70% or more completion of your assigned area's complaint load before midnight to unlock 1 Digital Coin for the day.
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-slate-200">
+                            <span class="font-bold text-slate-800 block mb-0.5">Disbursement Rate</span>
+                            <strong>1 Coin = ₹100 INR / $15 USD</strong>. On the 30th/31st of each month, balances are automatically tallied and paid out directly.
+                        </div>
+                    </div>
+                    <button onclick="requestMonthEndPayout()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                        <span>Simulate End-of-Month Cash Payout Statement</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Resolve Complaint Modal (Photo Upload Required) -->
+<div id="resolveModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-lg p-6 sm:p-8 modal-fade-in">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+            <h3 class="text-lg font-bold text-slate-900 font-heading flex items-center space-x-2">
+                <i class="fa-solid fa-camera-rotate text-teal-600"></i>
+                <span>Verify &amp; Clear Complaint</span>
+            </h3>
+            <button onclick="closeResolveModal()" class="text-slate-400 hover:text-slate-600 text-lg">✕</button>
+        </div>
+
+        <form onsubmit="submitResolveComplaint(event)" class="space-y-4">
+            <input type="hidden" id="resolveComplaintId">
+
+            <div class="p-3 bg-teal-50 rounded-xl text-xs text-teal-800 flex items-center justify-between">
+                <span>Complaint ID: <strong id="modalComplaintIdDisplay">CMP-XXXX</strong></span>
+                <span class="text-teal-600 font-semibold" id="modalAreaDisplay">Downtown Sector 1</span>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                    Upload Picture of Cleaned Place * <span class="text-emerald-600">(Mandatory for Verification)</span>
+                </label>
+                <div class="border-2 border-dashed border-teal-300 rounded-2xl p-6 text-center hover:border-teal-500 transition bg-teal-50/30 cursor-pointer" onclick="document.getElementById('resolvedPictureInput').click()">
+                    <input type="file" id="resolvedPictureInput" accept="image/*" required class="hidden" onchange="previewResolvedImage(event)">
+                    <div id="resolvedPlaceholder">
+                        <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center mx-auto mb-2 text-base">
+                            <i class="fa-solid fa-camera"></i>
+                        </div>
+                        <p class="text-xs font-semibold text-slate-700">Click to upload photo of cleaned area</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Proof of completed cleaning</p>
+                    </div>
+                    <div id="resolvedPreviewContainer" class="hidden">
+                        <img id="resolvedPreview" src="" alt="Proof" class="max-h-48 mx-auto rounded-xl shadow-md border border-slate-200 object-cover">
+                        <button type="button" onclick="clearResolvedImage(event)" class="mt-2 text-xs font-semibold text-red-600 hover:text-red-700">
+                            Remove photo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Resolution Summary / Sanitary Notes</label>
+                <textarea id="resolvedNotes" rows="3" placeholder="e.g. Cleared 2 tons of wet garbage, disinfected pavement with chlorine, placed fresh community bins." class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs"></textarea>
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-3">
+                <button type="button" onclick="closeResolveModal()" class="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 text-xs font-semibold">Cancel</button>
+                <button type="submit" id="resolveSubmitBtn" class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold shadow-md shadow-teal-600/20 transition flex items-center space-x-2">
+                    <i class="fa-solid fa-check-double"></i>
+                    <span>Confirm &amp; Complete Task</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/collector.js') }}"></script>
+{% endblock %}

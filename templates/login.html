@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+{% block title %}EcoClean - Sign In / Register{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto px-4 py-12">
+    <!-- Card Container -->
+    <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+        <!-- Role Selection Tabs -->
+        <div class="grid grid-cols-3 bg-slate-100 p-1.5 gap-1 border-b border-slate-200">
+            <button id="tabUserBtn" onclick="switchLoginRole('user')" class="py-3 px-2 rounded-2xl text-xs sm:text-sm font-semibold transition flex items-center justify-center space-x-1.5 bg-white text-emerald-700 shadow-sm">
+                <i class="fa-solid fa-user"></i>
+                <span>Citizen</span>
+            </button>
+            <button id="tabColBtn" onclick="switchLoginRole('collector')" class="py-3 px-2 rounded-2xl text-xs sm:text-sm font-semibold transition flex items-center justify-center space-x-1.5 text-slate-500 hover:text-slate-800">
+                <i class="fa-solid fa-truck-pickup"></i>
+                <span>Collector</span>
+            </button>
+            <button id="tabAdminBtn" onclick="switchLoginRole('admin')" class="py-3 px-2 rounded-2xl text-xs sm:text-sm font-semibold transition flex items-center justify-center space-x-1.5 text-slate-500 hover:text-slate-800">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Admin</span>
+            </button>
+        </div>
+
+        <div class="p-6 sm:p-8">
+            <!-- 1. CITIZEN FORM AREA -->
+            <div id="userSection">
+                <!-- User Sub-tabs: Login vs Register -->
+                <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-100">
+                    <div>
+                        <h2 id="userFormTitle" class="text-xl font-bold font-heading text-slate-900">Citizen Sign In</h2>
+                        <p id="userFormSub" class="text-xs text-slate-500 mt-0.5">Access waste reporting, SLA tracking &amp; badge rewards</p>
+                    </div>
+                    <button id="toggleUserModeBtn" onclick="toggleUserAuthMode()" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
+                        Create Account
+                    </button>
+                </div>
+
+                <!-- Citizen Login Form -->
+                <form id="userLoginForm" onsubmit="handleUserLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Email ID or Phone Number</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-envelope"></i>
+                            </span>
+                            <input type="text" id="userLoginId" required placeholder="e.g. aarav@gmail.com or 9123456780" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-lock"></i>
+                            </span>
+                            <input type="password" id="userLoginPass" required placeholder="••••••••" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-md shadow-emerald-600/20 transition flex items-center justify-center space-x-2">
+                        <span>Log In as Citizen</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                    <!-- Quick autofill demo -->
+                    <div class="pt-2 text-center">
+                        <button type="button" onclick="autofillCitizenDemo()" class="text-xs text-slate-500 hover:text-emerald-600">
+                            ⚡ Autofill Demo Citizen (Aarav Patel)
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Citizen Registration Form (Hidden by default) -->
+                <form id="userRegisterForm" onsubmit="handleUserRegister(event)" class="space-y-4 hidden">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Full Name *</label>
+                        <input type="text" id="regName" required placeholder="e.g. Rahul Sharma" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Age</label>
+                            <input type="number" id="regAge" min="12" max="100" placeholder="28" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Gender</label>
+                            <select id="regGender" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Locality / Area *</label>
+                        <select id="regArea" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm">
+                            <option value="Downtown Sector 1">Downtown Sector 1</option>
+                            <option value="Greenwood Park">Greenwood Park</option>
+                            <option value="Riverside Colony">Riverside Colony</option>
+                            <option value="Metro Central">Metro Central</option>
+                            <option value="Sunnyvale West">Sunnyvale West</option>
+                            <option value="Industrial Zone B">Industrial Zone B</option>
+                            <option value="Old Town Square">Old Town Square</option>
+                            <option value="Highland Heights">Highland Heights</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">E-mail ID *</label>
+                        <input type="email" id="regEmail" required placeholder="user@example.com" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Phone Number *</label>
+                        <input type="tel" id="regPhone" required placeholder="9876543210" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Password *</label>
+                        <input type="password" id="regPassword" required placeholder="Minimum 6 characters" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm">
+                    </div>
+                    <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-100 text-xs text-emerald-800">
+                        <i class="fa-solid fa-fingerprint mr-1"></i> A <strong>Unique ID number (e.g. USR-XXXX)</strong> will be automatically generated upon registration.
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-md shadow-emerald-600/20 transition">
+                        Complete Registration &amp; Sign In
+                    </button>
+                </form>
+            </div>
+
+            <!-- 2. COLLECTOR FORM AREA -->
+            <div id="colSection" class="hidden">
+                <div class="pb-4 mb-6 border-b border-slate-100">
+                    <h2 class="text-xl font-bold font-heading text-slate-900">Waste Collector Login</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">View assigned municipal area complaints &amp; earn daily coins</p>
+                </div>
+                <form id="colLoginForm" onsubmit="handleCollectorLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Collector Email ID or Phone Number</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-truck-pickup"></i>
+                            </span>
+                            <input type="text" id="colLoginId" required placeholder="e.g. rajesh.col@ecoclean.org or 9811002233" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-lock"></i>
+                            </span>
+                            <input type="password" id="colLoginPass" required placeholder="••••••••" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 text-sm">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-semibold text-sm shadow-md shadow-teal-600/20 transition flex items-center justify-center space-x-2">
+                        <span>Log In to Collector Portal</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                    <!-- Quick demo autofill -->
+                    <div class="pt-2 text-center">
+                        <button type="button" onclick="autofillCollectorDemo()" class="text-xs text-slate-500 hover:text-teal-600">
+                            ⚡ Autofill Demo Collector (Rajesh Kumar - Downtown Sector 1)
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 3. ADMIN FORM AREA (Single User Login) -->
+            <div id="adminSection" class="hidden">
+                <div class="pb-4 mb-6 border-b border-slate-100">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-700">SINGLE USER SYSTEM</span>
+                    </div>
+                    <h2 class="text-xl font-bold font-heading text-slate-900 mt-1">Municipal Admin Sign In</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Control center for waste area alerts, user loggers &amp; employees</p>
+                </div>
+                <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Admin Email or Phone Number</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </span>
+                            <input type="text" id="adminLoginId" required placeholder="admin@ecoclean.org or 9876543210" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Admin Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-lock"></i>
+                            </span>
+                            <input type="password" id="adminLoginPass" required placeholder="••••••••" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-md shadow-indigo-600/20 transition flex items-center justify-center space-x-2">
+                        <span>Authenticate Central Admin</span>
+                        <i class="fa-solid fa-shield-halved text-xs"></i>
+                    </button>
+                    <!-- Quick demo autofill -->
+                    <div class="pt-2 text-center">
+                        <button type="button" onclick="autofillAdminDemo()" class="text-xs text-slate-500 hover:text-indigo-600">
+                            ⚡ Autofill Demo Admin Credentials
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Tab switching logic
+    function switchLoginRole(role) {
+        const tabUserBtn = document.getElementById('tabUserBtn');
+        const tabColBtn = document.getElementById('tabColBtn');
+        const tabAdminBtn = document.getElementById('tabAdminBtn');
+
+        const userSection = document.getElementById('userSection');
+        const colSection = document.getElementById('colSection');
+        const adminSection = document.getElementById('adminSection');
+
+        // Reset tab styles
+        [tabUserBtn, tabColBtn, tabAdminBtn].forEach(btn => {
+            btn.className = "py-3 px-2 rounded-2xl text-xs sm:text-sm font-semibold transition flex items-center justify-center space-x-1.5 text-slate-500 hover:text-slate-800";
+        });
+        [userSection, colSection, adminSection].forEach(sec => sec.classList.add('hidden'));
+
+        if (role === 'user') {
+            tabUserBtn.className = "py-3 px-2 rounded-2xl text-xs sm:text-sm font-semibold transition flex items-center justify-center space-x-1.5 bg-white text-emerald-700 shadow-sm";
+            userSection.classList.remove('hidden');
+        } else if (role === 'collector') {
+            tabColBtn.className = "py-3 px-2 rounded-2xl text-xs sm:text-sm font-semibold transition flex items-center justify-center space-x-1.5 bg-white text-teal-700 shadow-sm";
+            colSection.classList.remove('hidden');
+        } else if (role === 'admin') {
+            tabAdminBtn.className = "py-3 px-2 rounded-2xl text-xs sm:text-sm font-semibold transition flex items-center justify-center space-x-1.5 bg-white text-indigo-700 shadow-sm";
+            adminSection.classList.remove('hidden');
+        }
+    }
+
+    let isRegisterMode = false;
+    function toggleUserAuthMode() {
+        isRegisterMode = !isRegisterMode;
+        const loginForm = document.getElementById('userLoginForm');
+        const regForm = document.getElementById('userRegisterForm');
+        const title = document.getElementById('userFormTitle');
+        const sub = document.getElementById('userFormSub');
+        const btn = document.getElementById('toggleUserModeBtn');
+
+        if (isRegisterMode) {
+            loginForm.classList.add('hidden');
+            regForm.classList.remove('hidden');
+            title.textContent = "Citizen Registration";
+            sub.textContent = "Create citizen profile & obtain Unique User ID";
+            btn.textContent = "Back to Sign In";
+        } else {
+            loginForm.classList.remove('hidden');
+            regForm.classList.add('hidden');
+            title.textContent = "Citizen Sign In";
+            sub.textContent = "Access waste reporting, SLA tracking & badge rewards";
+            btn.textContent = "Create Account";
+        }
+    }
+
+    // Demo Fill Helpers
+    function autofillCitizenDemo() {
+        document.getElementById('userLoginId').value = 'aarav@gmail.com';
+        document.getElementById('userLoginPass').value = 'user123';
+    }
+
+    function autofillCollectorDemo() {
+        document.getElementById('colLoginId').value = 'rajesh.col@ecoclean.org';
+        document.getElementById('colLoginPass').value = 'col123';
+    }
+
+    function autofillAdminDemo() {
+        document.getElementById('adminLoginId').value = 'admin@ecoclean.org';
+        document.getElementById('adminLoginPass').value = 'admin123';
+    }
+
+    // Initialize from URL params if present
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const role = urlParams.get('role');
+        const tab = urlParams.get('tab');
+        if (role) {
+            switchLoginRole(role);
+        }
+        if (tab === 'register') {
+            toggleUserAuthMode();
+        }
+    });
+</script>
+{% endblock %}
